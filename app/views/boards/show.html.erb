@@ -1,71 +1,96 @@
-<div>
-  <div>
-    <h1>
-      Board #<%= @the_board.id %> details
-    </h1>
-
-    <div>
-      <div>
-        <a href="/boards">
-          Go back
-        </a>
-      </div>
-
-      <div>
-        <a href="/delete_board/<%= @the_board.id %>">
-          Delete board
-        </a>
-      </div>
-    </div>
-
-    <dl>
-      <dt>
-        Name
-      </dt>
-      <dd>
-        <%= @the_board.name %>
-      </dd>
-
-      <dt>
-        Created at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_board.created_at) %> ago
-      </dd>
-
-      <dt>
-        Updated at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_board.updated_at) %> ago
-      </dd>
-    </dl>
-  </div>
-</div>
+<h1>
+  <%= @the_board.name %> 
+</h1>
 
 <hr>
 
-
-<div>
-  <div>
+<div classname="add_post">
     <h2>
-      Edit board
+      Add a new post
     </h2>
 
-    <form action="/modify_board/<%= @the_board.id %>"  method="post" >
-      <div>
-        <label for="name_box">
-          Name
-        </label>
+    <form action="/insert_post" method="post">
+      <input name="query_board_id" type="hidden" value="<%= @the_board.id %>">
 
-        <input type="text" id="name_box" name="query_name" value="<%= @the_board.name %>">
+      <div>
+        <label for="query_title">
+            Title
+        </label>
+          
+        <input id="query_title" type="text" name="query_title" required>
       </div>
 
+      <div>
+        <label for="query_body">
+          Body
+        </label>
+        <textarea id="query_body" type="text" name="query_body" required>
+        </textarea>
+      </div>
+
+      <div>
+        <label for="query_expires_on">
+          Expires on 
+        </label>
+        <input id="query_expires_on" type="date" name="query_expires_on" required>
+      </div>
+      
       <button>
-        Update board
+        Add post
       </button>
     </form>
-  </div>
 </div>
 
 <hr>
+
+<h2>
+  Active posts
+</h2>
+
+<table border="1">
+  <tr>
+    <th>
+      Title
+    </th>
+
+    <th>
+      Body
+    </th>
+
+    <th>
+      Posted on
+    </th>
+
+    <th>
+      Expires on
+    </th>
+  </tr>
+
+  <% @the_board.posts.order(created_at: :desc).each do |post|%>
+
+  <tr>
+    <td>
+      <%= post.title %>
+    </td>
+
+    <td>
+      <%= post.body%>
+    </td>
+
+    <td>
+      <%= post.created_at%>
+    </td>
+
+    <td>
+      <%= post.expires_on%>
+    </td>
+  </tr>
+
+  <% end %>
+</table>
+
+   
+
+<h2>
+  Expired posts
+</h2>
